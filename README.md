@@ -1,5 +1,7 @@
 # Crashlog::AuthHMAC
 
+[![Build Status](https://secure.travis-ci.org/crashlog/auth-hmac.png?branch=master)](http://travis-ci.org/crashlog/auth-hmac)
+
 auth-hmac is a Ruby implementation of HMAC based authentication of HTTP requests.
 
 HMAC authentication involves a client and server having a shared secret key. When sending the request the client, signs the request using the secret key. This involves building a canonical representation of the request and then generating a HMAC of the request using the secret. The generated HMAC is then sent as part of the request.
