@@ -1,1 +1,1 @@
-require "crash_log/faraday/auth_hmac"
+require "crash_log/auth_hmac"

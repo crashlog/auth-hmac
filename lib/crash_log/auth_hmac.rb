@@ -134,7 +134,7 @@ module CrashLog
       @credential_store = credential_store
 
       # Defaults
-      @service_id = self.class.name
+      @service_id = self.class.name.split(/::/).last
       @signature_class = @@default_signature_class
 
       unless options.nil?
