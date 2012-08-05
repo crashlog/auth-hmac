@@ -1,0 +1,16 @@
+PATH
+  remote: .
+  specs:
+    crashlog-auth-hmac (1.1.2)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    rake (0.9.2.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  crashlog-auth-hmac!
+  rake
