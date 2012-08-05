@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["ivan@crashlog.io"]
   gem.description   = %q{A Ruby Gem for authenticating HTTP requests using a HMAC}
   gem.summary       = %q{A Ruby Gem for authenticating HTTP requests using a HMAC}
-  gem.homepage      = "crashlog.io"
+  gem.homepage      = "http://crashlog.io"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
