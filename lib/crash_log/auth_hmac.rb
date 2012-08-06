@@ -26,6 +26,8 @@ module CrashLog
       def headers(request)
         if request.respond_to?(:headers)
           request.headers
+        elsif request.is_a?(Hash) && request.has_key?(:request_headers)
+          request[:request_headers]
         elsif request.respond_to?(:[])
           request
         else
@@ -71,6 +73,8 @@ module CrashLog
       def request_method(request)
         if request.respond_to?(:request_method) && request.request_method.is_a?(String)
           request.request_method
+        elsif request.is_a?(Hash) && request.has_key?(:method)
+          request[:method].to_s
         elsif request.respond_to?(:method) && request.method.is_a?(String)
           request.method
         elsif request.respond_to?(:env) && request.env
@@ -103,6 +107,8 @@ module CrashLog
         # Try unparsed_uri in case it is a Webrick request
         path = if request.respond_to?(:unparsed_uri)
           request.unparsed_uri
+        elsif request.is_a?(Hash) && request.has_key?(:url) && request[:url].is_a?(URI)
+          request[:url].path
         else
           request.path
         end

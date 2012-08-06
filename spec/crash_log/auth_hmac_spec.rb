@@ -54,6 +54,22 @@ describe CrashLog::AuthHMAC do
       CrashLog::AuthHMAC.sign!(request, "my-key-id", "secret", options)
       request['Authorization'].should == "MyService my-key-id:/L4N1v1BZSHfAYkQjsvZn696D9c="
     end
+
+    it 'can sign a faraday request hash' do
+      Time.stub(:now).and_return(Time.parse("Thu, 10 Jul 2008 03:29:56 GMT"))
+
+      env = {
+        :method=>:get,
+        :body=>"test",
+        :url=>URI.parse("http://sushi.com/api/foo.json"),
+        :request_headers=>{"Date" => Time.now.utc.httpdate},
+        :parallel_manager=>nil,
+        :request=>nil,
+        :ssl=>{}
+      }
+      CrashLog::AuthHMAC.sign!(env, "access_id", "secret", { :service_id => 'MyService' })
+      env['Authorization'].should == 'MyService access_id:ZQnbYwmno+PsaavXzUAdvj/DKvo='
+    end
   end
 
   describe "#sign!" do
