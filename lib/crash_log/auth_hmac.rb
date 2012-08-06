@@ -150,7 +150,7 @@ module CrashLog
     # Supports same options as AuthHMAC.initialize for overriding service_id and
     # signature method.
     #
-    def AuthHMAC.canonical_string(request, options = nil)
+    def self.canonical_string(request, options = nil)
       self.new(nil, options).canonical_string(request)
     end
 
@@ -159,7 +159,7 @@ module CrashLog
     # Supports same options as AuthHMAC.initialize for overriding service_id and
     # signature method.
     #
-    def AuthHMAC.signature(request, secret, options = nil)
+    def self.signature(request, secret, options = nil)
       self.new(nil, options).signature(request, secret)
     end
 
@@ -168,7 +168,7 @@ module CrashLog
     # Supports same options as AuthHMAC.initialize for overriding service_id and
     # signature method.
     #
-    def AuthHMAC.sign!(request, access_key_id, secret, options = nil)
+    def self.sign!(request, access_key_id, secret, options = nil)
       credentials = { access_key_id => secret }
       self.new(credentials, options).sign!(request, access_key_id)
     end
@@ -178,7 +178,7 @@ module CrashLog
     # Supports same options as AuthHMAC.initialize for overriding service_id and
     # signature method.
     #
-    def AuthHMAC.authenticated?(request, access_key_id, secret, options)
+    def self.authenticated?(request, access_key_id, secret, options)
       credentials = { access_key_id => secret }
       self.new(credentials, options).authenticated?(request)
     end
