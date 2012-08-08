@@ -75,10 +75,12 @@ module CrashLog
           request.request_method
         elsif request.is_a?(Hash) && request.has_key?(:method)
           request[:method].to_s
-        elsif request.respond_to?(:method) && request.method.is_a?(String)
-          request.method
         elsif request.respond_to?(:env) && request.env
           request.env['REQUEST_METHOD']
+        elsif request.is_a?(Hash) && request.has_key?('REQUEST_METHOD')
+          request['REQUEST_METHOD']
+        elsif request.respond_to?(:method) && request.method.is_a?(String)
+          request.method
         else
           raise ArgumentError, "Don't know how to get the request method from #{request.inspect}"
         end
@@ -109,6 +111,8 @@ module CrashLog
           request.unparsed_uri
         elsif request.is_a?(Hash) && request.has_key?(:url) && request[:url].is_a?(URI)
           request[:url].path
+        elsif request.is_a?(Hash) && request.has_key?('PATH_INFO')
+          request['PATH_INFO']
         else
           request.path
         end
