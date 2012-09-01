@@ -79,10 +79,12 @@ module CrashLog
           request.env['REQUEST_METHOD']
         elsif request.is_a?(Hash) && request.has_key?('REQUEST_METHOD')
           request['REQUEST_METHOD']
-        elsif request.respond_to?(:method) && request.method.is_a?(String)
-          request.method
         else
-          raise ArgumentError, "Don't know how to get the request method from #{request.inspect}"
+          begin
+            request.method
+          rescue ArgumentError
+            raise ArgumentError, "Don't know how to get the request method from #{request.inspect}"
+          end
         end
       end
 
