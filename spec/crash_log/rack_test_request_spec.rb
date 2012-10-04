@@ -49,4 +49,16 @@ describe CrashLog::AuthHMAC do
     sig = CrashLog::AuthHMAC.signature(request_hash, 'secret')
     sig.should == CrashLog::AuthHMAC.signature(standard_request, 'secret')
   end
+
+  it 'accepts real request without content md5' do
+    Delorean.time_travel_to(Date.parse("Thu, 04 Oct 2012 08:31:16 GMT"))
+
+    request = Net::HTTP::Post.new("/events",
+      'content-type' => 'application/json; charset=UTF-8',
+      'date' => "Thu, 04 Oct 2012 08:31:16 GMT")
+
+    sig = CrashLog::AuthHMAC.signature(request, '2Xbz25UpU8nQxaSAKuixJQMDxuiqryxzArzSJJ8Ci3Mr')
+    sig.should == 'Rqj0DdG4/jNrzOXdybz13CaKzXU='
+  end
+
 end
