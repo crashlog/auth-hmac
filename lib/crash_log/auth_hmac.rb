@@ -96,15 +96,15 @@ module CrashLog
       end
 
       def content_type(headers)
-        find_header(%w(CONTENT-TYPE CONTENT_TYPE HTTP_CONTENT_TYPE), headers)
+        find_header(%w(CONTENT-TYPE CONTENT_TYPE HTTP_CONTENT_TYPE content-type), headers)
       end
 
       def date(headers)
-        find_header(%w(DATE HTTP_DATE), headers)
+        find_header(%w(DATE HTTP_DATE date), headers)
       end
 
       def content_md5(headers)
-        find_header(%w(CONTENT-MD5 CONTENT_MD5), headers)
+        find_header(%w(CONTENT-MD5 CONTENT_MD5 content-md5), headers)
       end
 
       def request_path(request)
@@ -230,7 +230,8 @@ module CrashLog
 
     def signature(request, secret)
       digest = OpenSSL::Digest::Digest.new('sha1')
-      Base64.encode64(OpenSSL::HMAC.digest(digest, secret, canonical_string(request))).strip
+      string = canonical_string(request)
+      Base64.strict_encode64(OpenSSL::HMAC.digest(digest, secret, string)).strip
     end
 
     def canonical_string(request)

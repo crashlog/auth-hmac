@@ -34,14 +34,19 @@ describe CrashLog::AuthHMAC do
     Delorean.time_travel_to(Date.parse("Thu, 10 Jul 2008 03:29:56 GMT"))
 
     request_hash = {
-      'REQUEST_METHOD' => 'POST',
+      'REQUEST_METHOD' => 'PUT',
       'content-type' => 'text/plain',
       'content-md5' => 'blahblah',
       'date' => "Thu, 10 Jul 2008 03:29:56 GMT",
       'PATH_INFO' => '/notify'
     }
 
+    standard_request = Net::HTTP::Put.new("/notify",
+      'content-type' => 'text/plain',
+      'content-md5' => 'blahblah',
+      'date' => "Thu, 10 Jul 2008 03:29:56 GMT")
+
     sig = CrashLog::AuthHMAC.signature(request_hash, 'secret')
-    sig.should == 'ODgXzfflvf+Sbr6wxGbWURucYgo='
+    sig.should == CrashLog::AuthHMAC.signature(standard_request, 'secret')
   end
 end
