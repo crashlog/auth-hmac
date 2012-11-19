@@ -66,8 +66,6 @@ module CrashLog
         self << request_method(request) + "\n"
         self << header_values(headers(request)) + "\n"
         self << request_path(request)
-
-        puts self.inspect
       end
 
     private
