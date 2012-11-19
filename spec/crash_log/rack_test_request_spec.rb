@@ -23,12 +23,11 @@ describe CrashLog::AuthHMAC do
   it 'can process rack test requests' do
     # HMAC uses date to validate request signature, we need to fix the date so
     # that it matches.
-    Delorean.time_travel_to(Time.utc(2008,7,10,3,29,56))
+    Delorean.time_travel_to(Time.utc(2012,10,04,8,31,16))
 
-    env = current_session.__send__(:env_for, '/notify', {:method => "POST", 'CONTENT_TYPE' => "text/plain"})
-    puts env.inspect
-    signature = CrashLog::AuthHMAC.sign!(env, "my-key-id", "secret")
-    signature.should == "AuthHMAC my-key-id:nt0VFUekBB3Ci5cCyaqy9fQnaK0="
+    env = current_session.__send__(:env_for, '/events', {:method => "POST", 'CONTENT_TYPE' => "application/json; charset=UTF-8"})
+    signature = CrashLog::AuthHMAC.signature(env, "2Xbz25UpU8nQxaSAKuixJQMDxuiqryxzArzSJJ8Ci3Mr")
+    signature.should == "Rqj0DdG4/jNrzOXdybz13CaKzXU="
   end
 
   it 'can handle hash requests' do
