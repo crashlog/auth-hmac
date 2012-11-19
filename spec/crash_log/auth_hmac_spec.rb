@@ -79,39 +79,38 @@ describe CrashLog::AuthHMAC do
         'content-type' => 'text/plain',
         'content-md5' => 'blahblah',
         'date' => "Thu, 10 Jul 2008 03:29:56 GMT")
-       @store = mock('store')
-      @store.stub!(:[]).and_return("")
+
+      @store = {'my-key-id' => 'secret'}
       @authhmac = CrashLog::AuthHMAC.new(@store)
     end
 
     describe "default AuthHMAC with CanonicalString signature" do
       it "should add an Authorization header" do
-        @authhmac.sign!(@get_request, 'key-id')
+        @authhmac.sign!(@get_request, 'my-key-id')
         @get_request.key?("Authorization").should be_true
       end
 
       it "should fetch the secret from the store" do
-        @store.should_receive(:[]).with('key-id').and_return('secret')
-        @authhmac.sign!(@get_request, 'key-id')
+        @store.should_receive(:[]).with('my-key-id').and_return('secret')
+        @authhmac.sign!(@get_request, 'my-key-id')
       end
 
       it "should prefix the Authorization Header with AuthHMAC" do
-        @authhmac.sign!(@get_request, 'key-id')
+        @authhmac.sign!(@get_request, 'my-key-id')
         @get_request['Authorization'].should match(/^AuthHMAC /)
       end
 
       it "should include the key id as the first part of the Authorization header value" do
-        @authhmac.sign!(@get_request, 'key-id')
-        @get_request['Authorization'].should match(/^AuthHMAC key-id:/)
+        @authhmac.sign!(@get_request, 'my-key-id')
+        @get_request['Authorization'].should match(/^AuthHMAC my-key-id:/)
       end
 
       it "should include the base64 encoded HMAC signature as the last part of the header value" do
-        @authhmac.sign!(@get_request, 'key-id')
+        @authhmac.sign!(@get_request, 'my-key-id')
         @get_request['Authorization'].should match(/:[A-Za-z0-9+\/]{26,28}[=]{0,2}$/)
       end
 
       it "should create a complete signature" do
-        @store.should_receive(:[]).with('my-key-id').and_return('secret')
         @authhmac.sign!(@put_request, "my-key-id")
         @put_request['Authorization'].should == "AuthHMAC my-key-id:71wAJM4IIu/3o6lcqx/tw7XnAJs="
       end
@@ -123,16 +122,16 @@ describe CrashLog::AuthHMAC do
           :service_id => 'MyService',
           :signature => CustomSignature
         }
-        @authhmac = CrashLog::AuthHMAC.new(@store, @options)
+        store = {'my-key-id' => 'secret'}
+        @authhmac = CrashLog::AuthHMAC.new(store, @options)
       end
 
       it "should prefix the Authorization header with custom service id" do
-        @authhmac.sign!(@get_request, 'key-id')
+        @authhmac.sign!(@get_request, 'my-key-id')
         @get_request['Authorization'].should match(/^MyService /)
       end
 
       it "should create a complete signature using options" do
-        @store.should_receive(:[]).with('my-key-id').and_return('secret')
         @authhmac.sign!(@put_request, "my-key-id")
         @put_request['Authorization'].should == "MyService my-key-id:/L4N1v1BZSHfAYkQjsvZn696D9c="
       end
