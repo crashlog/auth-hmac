@@ -25,7 +25,7 @@ describe CrashLog::AuthHMAC do
     # that it matches.
     Delorean.time_travel_to(Date.parse("Thu, 10 Jul 2008 03:29:56 GMT"))
 
-    env = current_session.__send__(:env_for, '/notify', {}.merge(:method => "POST", :params => {token: 'my-key-id'}))
+    env = current_session.__send__(:env_for, '/notify', {}.merge(:method => "POST", :params => {:token => 'my-key-id'}))
     signature = CrashLog::AuthHMAC.sign!(env, "my-key-id", "secret")
     signature.should == "AuthHMAC my-key-id:nt0VFUekBB3Ci5cCyaqy9fQnaK0="
   end
