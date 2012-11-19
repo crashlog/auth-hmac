@@ -66,6 +66,8 @@ module CrashLog
         self << request_method(request) + "\n"
         self << header_values(headers(request)) + "\n"
         self << request_path(request)
+
+        puts self.inspect
       end
 
     private
@@ -75,7 +77,7 @@ module CrashLog
           request.request_method
         elsif request.is_a?(Hash) && request.has_key?(:method)
           request[:method].to_s
-        elsif request.respond_to?(:env) && request.env
+        elsif request.respond_to?(:env)
           request.env['REQUEST_METHOD']
         elsif request.is_a?(Hash) && request.has_key?('REQUEST_METHOD')
           request['REQUEST_METHOD']
