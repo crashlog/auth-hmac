@@ -231,7 +231,8 @@ module CrashLog
     def signature(request, secret)
       digest = OpenSSL::Digest::Digest.new('sha1')
       string = canonical_string(request)
-      encoded_signature = Base64.encode64(OpenSSL::HMAC.digest(digest, secret, string))
+      hmac = OpenSSL::HMAC.digest(digest, secret, string)
+      encoded_signature = Base64.encode64(hmac)
       encoded_signature.gsub(/\n/, '').strip
     end
 
