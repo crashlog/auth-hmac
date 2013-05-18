@@ -48,15 +48,25 @@ The access_id is used to identify the secret key that was used to sign the reque
 
 The secret key is the shared secret between the client and the server. You should make this sufficiently random so that is can’t be guessed or exposed to dictionary attacks. The follow code will give you a pretty good secret key:
 
-random = File.read(‘/dev/random’, 512) secret_key = Base64.encode64(Digest::SHA2.new(512).digest(random)) On the server side you can then authenticate these requests using the AuthHMAC.authenticated? method. This takes the same arguments as the sign! method but returns true if the request has been signed with the access id and secret	or false if it hasn’t.
+````
+random = File.read(‘/dev/random’, 512) 
+secret_key = Base64.encode64(Digest::SHA2.new(512).digest(random))
+````
+
+On the server side you can then authenticate these requests using the `AuthHMAC.authenticated?` method. This takes the same arguments as the `sign!` method but returns true if the request has been signed with the access id and secret or false if it hasn’t.
 
 If you have more than one set of credentials you might find it useful to create an instance of the AuthHMAC class, passing your credentials as a Hash of access id => secret keys, like so:
 
-@authhmac = AuthHMAC.new(‘access_id1’ => ‘secret1’, ‘access_id2’ => ‘secret2’) You can then use the instance methods of the @authhmac object to sign and authenticate requests, for example:
+    @authhmac = AuthHMAC.new(‘access_id1’ => ‘secret1’, ‘access_id2’ => ‘secret2’)
 
-@authhmac.sign!(request, “access_id1”) will sign request with “access_id1” and it’s corresponding secret key. Similarly authentication is done like so:
+You can then use the instance methods of the @authhmac object to sign and authenticate requests, for example:
 
-@authhmac.authenticated?(request)
+    @authhmac.sign!(request, “access_id1”) 
+
+will sign request with “access_id1” and it’s corresponding secret key. Similarly authentication is done like so:
+
+    @authhmac.authenticated?(request)
+    
 which will return true if the request has been signed with one of the access id and secret key pairs provided in the constructor.
 
 ## Contributing
